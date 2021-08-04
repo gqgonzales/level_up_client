@@ -24,9 +24,8 @@ export const GameProvider = (props) => {
         Authorization: `Token ${localStorage.getItem("lu_token")}`,
       },
       body: JSON.stringify(game),
-    })
-      .then(getGames)
-      .then();
+    }).then(getGames);
+    // .then();
   };
 
   const getGameTypes = () => {
