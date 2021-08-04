@@ -6,7 +6,7 @@ export const EventList = (props) => {
 
   useEffect(() => {
     getEvents();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <article className="events">
@@ -16,7 +16,7 @@ export const EventList = (props) => {
       {events.map((event) => {
         return (
           <section key={event.id} className="registration">
-            <div className="registration__game">{event.game.title}</div>
+            <div className="registration__game">{event.game.name}</div>
             <div>{event.description}</div>
             <div>
               {new Date(event.date).toLocaleDateString("en-US", {
