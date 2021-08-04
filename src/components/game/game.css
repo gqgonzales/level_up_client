@@ -1,0 +1,9 @@
+.game {
+  border: 2px dashed teal;
+  margin: 1px;
+}
+
+.btn {
+  border: 2px dashed teal;
+  padding: 2px;
+}
