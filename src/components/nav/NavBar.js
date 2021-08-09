@@ -15,7 +15,10 @@ export const NavBar = (props) => {
         {/* <button onClick={() => history.push("/events")}>Events</button> */}
         <Link to={"/events"}>Events</Link>
       </li>
-      <li className="navbar__item">Profile</li>
+      <li className="navbar__item">
+        {/* <button onClick={() => history.push("/events")}>Events</button> */}
+        <Link to={"/profile"}>Profile</Link>
+      </li>
       {localStorage.getItem("lu_token") !== null ? (
         <li className="nav-item">
           <button
