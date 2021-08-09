@@ -1,5 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import { ProfileProvider } from "./auth/ProfileProvider.js";
+import { Profile } from "./auth/ProfileView.js";
 import { EventForm } from "./event/EventForm.js";
 import { EventList } from "./event/EventList.js";
 import { EventProvider } from "./event/EventProvider.js";
@@ -18,25 +20,32 @@ export const ApplicationViews = () => {
       >
         <EventProvider>
           <GameProvider>
-            <Route exact path="/">
-              <GameList />
-            </Route>
+            {/* Profile */}
+            <ProfileProvider>
+              <Route exact path="/profile">
+                <Profile />
+              </Route>
 
-            <Route exact path="/games">
-              <GameList />
-            </Route>
+              <Route exact path="/">
+                <GameList />
+              </Route>
 
-            <Route exact path="/games/new">
-              <GameForm />
-            </Route>
+              <Route exact path="/games">
+                <GameList />
+              </Route>
 
-            <Route exact path="/events">
-              <EventList />
-            </Route>
+              <Route exact path="/games/new">
+                <GameForm />
+              </Route>
 
-            <Route exact path="/events/new">
-              <EventForm />
-            </Route>
+              <Route exact path="/events">
+                <EventList />
+              </Route>
+
+              <Route exact path="/events/new">
+                <EventForm />
+              </Route>
+            </ProfileProvider>
           </GameProvider>
         </EventProvider>
       </main>
