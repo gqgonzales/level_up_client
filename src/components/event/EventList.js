@@ -5,7 +5,7 @@ import "./events.css";
 
 export const EventList = () => {
   const history = useHistory();
-  const { events, getEvents, joinEvent } = useContext(EventContext);
+  const { events, getEvents, joinEvent, leaveEvent } = useContext(EventContext);
 
   useEffect(() => {
     getEvents();
@@ -25,19 +25,25 @@ export const EventList = () => {
         </button>
       </header>
       {events.map((event) => {
-        // const attending = profile.events.some((evt) => evt.id === event.id);
         return (
           <section key={event.id} className="registration">
-            <div className="registration__game">{event.title}</div>
-            <div>
-              {event.description}. We'll be playing {event.game.name}!
-            </div>
+            <div className="registration__game">{event.game.title}</div>
+            <div>{event.description}</div>
             <div>
               {event.date} @ {event.time}
             </div>
-            <button className="btn btn-2" onClick={() => joinEvent(event.id)}>
-              Join
-            </button>
+            {event.joined ? (
+              <button
+                className="btn btn-3"
+                onClick={() => leaveEvent(event.id)}
+              >
+                Leave
+              </button>
+            ) : (
+              <button className="btn btn-2" onClick={() => joinEvent(event.id)}>
+                Join
+              </button>
+            )}
           </section>
         );
       })}
