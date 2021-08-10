@@ -35,6 +35,14 @@ export const GameList = (props) => {
               <div className="game__skill_level">
                 Skill level is {game.skill_level}
               </div>
+              <div className="game__edit">
+                <button
+                  className="btn btn-3"
+                  onClick={() => history.push(`/games/${game.id}/edit`)}
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           );
         })}

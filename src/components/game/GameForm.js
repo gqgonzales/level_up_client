@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GameContext } from "./GameProvider.js";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import "./game.css";
 
 export const GameForm = () => {
   const history = useHistory();
-  const { createGame, getGameTypes, gameTypes } = useContext(GameContext);
+  const { game_id } = useParams();
+  const { createGame, getGameTypes, gameTypes, getGameById, editGame } =
+    useContext(GameContext);
 
   /*
         Since the input fields are bound to the values of
@@ -29,6 +31,20 @@ export const GameForm = () => {
     getGameTypes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (game_id) {
+      getGameById(game_id).then((game) => {
+        setCurrentGame({
+          skill_level: game.skill_level,
+          number_of_players: game.number_of_players,
+          name: game.name,
+          maker: game.maker,
+          description: game.description,
+          game_type_id: game.game_type.id,
+        });
+      });
+    }
+  }, [game_id]);
   /*
         REFACTOR CHALLENGE START
 
@@ -88,7 +104,9 @@ export const GameForm = () => {
   return (
     <form className="gameForm">
       {/* -------------- NAME --------------*/}
-      <h2 className="gameForm__name">Register New Game</h2>
+      <h2 className="gameForm__name">
+        {game_id ? "Edit This Game" : "Register New Game"}
+      </h2>
       <fieldset>
         <div className="form-group">
           <label htmlFor="name">Title: </label>
@@ -104,7 +122,6 @@ export const GameForm = () => {
           />
         </div>
       </fieldset>
-
       {/* You create the rest of the input fields for each game property */}
       {/* -------------- MAKER --------------*/}
       <fieldset>
@@ -159,7 +176,8 @@ export const GameForm = () => {
         <div className="form-group">
           <label htmlFor="game_type_id">Game Type </label>
           <select
-            defaultValue=""
+            // defaultValue=""
+            value={currentGame.game_type_id}
             name="game_type_id"
             ref={gameTypes}
             id="game_gameType"
@@ -196,30 +214,54 @@ export const GameForm = () => {
           </select>
         </div>
       </fieldset>
+      {game_id ? (
+        <button
+          type="submit"
+          onClick={(evt) => {
+            // Prevent form from being submitted
+            evt.preventDefault();
 
-      {/* BUTTON */}
-      <button
-        type="submit"
-        onClick={(evt) => {
-          // Prevent form from being submitted
-          evt.preventDefault();
+            const game = {
+              id: parseInt(game_id),
+              maker: currentGame.maker,
+              name: currentGame.name,
+              description: currentGame.description,
+              number_of_players: parseInt(currentGame.number_of_players),
+              skill_level: parseInt(currentGame.skill_level),
+              game_type_id: parseInt(currentGame.game_type_id),
+            };
 
-          const game = {
-            maker: currentGame.maker,
-            name: currentGame.name,
-            description: currentGame.description,
-            number_of_players: parseInt(currentGame.number_of_players),
-            skill_level: parseInt(currentGame.skill_level),
-            game_type_id: parseInt(currentGame.game_type_id),
-          };
+            // Send POST request to your API
+            editGame(game).then(() => history.push("/games"));
+          }}
+          className="btn btn-primary btn-2"
+        >
+          Save Edit
+        </button>
+      ) : (
+        <button
+          type="submit"
+          onClick={(evt) => {
+            // Prevent form from being submitted
+            evt.preventDefault();
 
-          // Send POST request to your API
-          createGame(game).then(() => history.push("/games"));
-        }}
-        className="btn btn-primary"
-      >
-        Create
-      </button>
+            const game = {
+              maker: currentGame.maker,
+              name: currentGame.name,
+              description: currentGame.description,
+              number_of_players: parseInt(currentGame.number_of_players),
+              skill_level: parseInt(currentGame.skill_level),
+              game_type_id: parseInt(currentGame.game_type_id),
+            };
+
+            // Send POST request to your API
+            createGame(game).then(() => history.push("/games"));
+          }}
+          className="btn btn-primary btn-2"
+        >
+          Create Game
+        </button>
+      )}
     </form>
   );
 };
