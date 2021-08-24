@@ -5,7 +5,8 @@ import "./events.css";
 
 export const EventList = () => {
   const history = useHistory();
-  const { events, getEvents, joinEvent, leaveEvent } = useContext(EventContext);
+  const { events, getEvents, joinEvent, leaveEvent, cancelEvent } =
+    useContext(EventContext);
 
   useEffect(() => {
     getEvents();
@@ -46,6 +47,14 @@ export const EventList = () => {
                 Join
               </button>
             )}
+            <button
+              className="btn btn-3"
+              onClick={() => {
+                cancelEvent(event.id).then(history.push("/events"));
+              }}
+            >
+              Delete Event
+            </button>
           </section>
         );
       })}
